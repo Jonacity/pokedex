@@ -1,8 +1,12 @@
 <h1>Pokemons</h1>
 
-<% @pokemons.each do |pokemon| %>
-    <p><%= pokemon.number  %> - <%= pokemon.name.capitalize %></p> 
-    <p>type: <%= pokemon.type_1 %></p>
-    <img src="<%= pokemon.image %>">
+<div class="row">
+    <% @pokemons.each do |pokemon| %>
+    <div class="col-xs-12 col-sm-4">
+        <p><%= pokemon.number  %> - <%= pokemon.name.capitalize %></p> 
+        <p>type: <%= pokemon.type_1 %></p>
+        <img src="<%= pokemon.image %>">
+    </div>
+    <% end %>
+</div>
 
-<% end %>
