@@ -1,2 +1,8 @@
-<h1>Pokemons#index</h1>
-<p>Find me in app/views/pokemons/index.html.erb</p>
+<h1>Pokemons</h1>
+
+<% @pokemons.each do |pokemon| %>
+    <p><%= pokemon.number  %> - <%= pokemon.name.capitalize %></p> 
+    <p>type: <%= pokemon.type_1 %></p>
+    <img src="<%= pokemon.image %>">
+
+<% end %>
