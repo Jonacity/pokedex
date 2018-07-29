@@ -12,63 +12,118 @@
     <% end %>
 </div> -->
 
-<div class="row" id="box">
-    
+<div class="row">
+    <div class="col-md-6">
+        <button type="button" class="btn btn-secondary" id="previous">Previous</button>
+    </div>
+
+    <div class="col-md-6">
+        <button type="button" class="btn btn-success" id="next">Next</button> 
+    </div>
 </div>
+
+<div class="row" id="box"></div>
+
 
 <script> 
 
 const box = document.getElementById("box");
 const search = document.getElementById("search");
+const next = document.getElementById("next");
+const previous = document.getElementById("previous");
+
+let pokemons = [];
 
 const url_list = "https://pokeapi.co/api/v2/pokemon-form/";
+const size = 18;
+let current = 1;
+const best = 150;
 
-fetch(url_list)
+next.addEventListener("click", (event) => {
+    if (current + size < best) {
+        if (needToFetch(current + size)) {
+            getSizePokemons(current + size, displayPokemons);
+        } else {
+            displayPokemons(current + size);
+        }
+    }
+})
+
+previous.addEventListener("click", (event) => {
+    if (current - size > 0) {
+        if (needToFetch(current - size)) {
+            getSizePokemons(current - size, displayPokemons);
+        } else {
+            displayPokemons(current - size);
+        }
+    }
+})
+
+function needToFetch(next) {
+    for (i = next; i < next + size; i++) {
+        if (!pokemons[i]) {
+            return true;
+        } 
+    }
+    return false;
+}
+
+function refreshList() {
+    
+}
+
+function init() {
+    getSizePokemons(current, displayPokemons);
+}
+
+function getPokemon(id, callback, arg) {
+    fetch(url_list + id)
     .then(response => response.json())
     .then((data) => {
         console.log(data);
-        data["results"].forEach((poke) => {
-            console.log(poke["name"]);
 
-            url_details = poke["url"];
-            
-            fetch(url_details)
-                .then(response => response.json())
-                .then((data) => {
-                    console.log(data);
-                    console.log(data["sprites"]["front_shiny"]);
-                    console.log(data["version_group"]["name"]);
+        pokemons[data["id"]] = data;
 
-                    pokemon_id = data["id"];
-                    pokemon_name = data["name"];
-                    pokemon_image = data["sprites"]["front_shiny"];
-                    pokemon_type = data["version_group"]["name"];
-                    
-                    item = `
-                        <div class="col-xs-12 col-sm-4">
-                            <p> ${pokemon_id}
-                            - ${pokemon_name}
-                            - ${pokemon_type} </p>
-                            <p><img src="${pokemon_image}"></p>
-                        </div>`;
-                    console.log(item);
-                
-                    box.insertAdjacentHTML("beforeend", item);
-
-            })
-        })
+        callback(arg);
     });
+}
 
+function getSizePokemons(current_id, callback) {
+    for (i = current_id; i < current_id + size; i++) {
+        getPokemon(i, callback, current_id);
+    }
+}
 
-search.addEventListener("keyup", (event) => {
-    console.log(event);
-    
-    <%# unless (name.includes(search.value)) {
-        box.innerHTML = "";
-    } %>
-})
+function displayPokemons(start) {
+    box.innerHTML = "";
+    for (i = start; i < start + size; i++) {
+        if (i <= 150) {
+            pokemon = pokemons[i];
+            if (pokemon) {
+                displayPokemon(pokemon);
+            } 
+        }  
+    }
+    current = start;
+}
+
+function displayPokemon(pokemon) {
+    pokemon_name = pokemon["name"];
+    pokemon_image = pokemon["sprites"]["front_shiny"];
+    pokemon_type = pokemon["version_group"]["name"];
+    pokemon_id = pokemon["id"];
+
+     item = `<div class="col-xs-12 col-sm-4">
+                <p> ${pokemon_id}
+                - ${pokemon_name}
+                - ${pokemon_type} </p>
+                <p><img src="${pokemon_image}"></p>
+            </div>`; 
+
+    box.insertAdjacentHTML("beforeend", item);
+}
+
+init();
 
 </script> 
-
-
 
