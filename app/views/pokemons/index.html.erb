@@ -33,6 +33,7 @@ const next = document.getElementById("next");
 const previous = document.getElementById("previous");
 
 let pokemons = [];
+let pokemons_search = [];
 
 const url_list = "https://pokeapi.co/api/v2/pokemon-form/";
 const size = 18;
@@ -122,6 +123,22 @@ function displayPokemon(pokemon) {
 
     box.insertAdjacentHTML("beforeend", item);
 }
+
+function displaySearchPokemons(value) {
+    console.log(value);
+}
+
+function getSearchPokemons() {
+    for (i = 1; i < best; i++) {
+        if (!pokemons[i]) {
+            getPokemon(i, displaySearchPokemons, search.value);
+        }     
+    }
+}
+
+search.addEventListener("keyup", (event) => {
+    getSearchPokemons();
+})
 
 init();
 
