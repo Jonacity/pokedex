@@ -1,12 +1,74 @@
 <h1>Pokemons</h1>
 
-<div class="row">
+<label>PokeSearch: <input id="search" type="text"></label>
+
+<!-- <div class="row">
     <% @pokemons.each do |pokemon| %>
-    <div class="col-xs-12 col-sm-4">
-        <p><%= pokemon.number  %> - <%= pokemon.name.capitalize %></p> 
+    <div class="col-xs-12 col-sm-4" id="box2">
+        <p><%= pokemon.number  %> - <div id="pokename2"><%= pokemon.name.capitalize %></div></p> 
         <p>type: <%= pokemon.type_1 %></p>
         <img src="<%= pokemon.image %>">
     </div>
     <% end %>
+</div> -->
+
+<div class="row" id="box">
+    
 </div>
+
+<script> 
+
+const box = document.getElementById("box");
+const search = document.getElementById("search");
+
+const url_list = "https://pokeapi.co/api/v2/pokemon-form/";
+
+fetch(url_list)
+    .then(response => response.json())
+    .then((data) => {
+        console.log(data);
+        data["results"].forEach((poke) => {
+            console.log(poke["name"]);
+
+            url_details = poke["url"];
+            
+            fetch(url_details)
+                .then(response => response.json())
+                .then((data) => {
+                    console.log(data);
+                    console.log(data["sprites"]["front_shiny"]);
+                    console.log(data["version_group"]["name"]);
+
+                    pokemon_id = data["id"];
+                    pokemon_name = data["name"];
+                    pokemon_image = data["sprites"]["front_shiny"];
+                    pokemon_type = data["version_group"]["name"];
+                    
+                    item = `
+                        <div class="col-xs-12 col-sm-4">
+                            <p> ${pokemon_id}
+                            - ${pokemon_name}
+                            - ${pokemon_type} </p>
+                            <p><img src="${pokemon_image}"></p>
+                        </div>`;
+                    console.log(item);
+                
+                    box.insertAdjacentHTML("beforeend", item);
+
+            })
+        })
+    });
+
+
+search.addEventListener("keyup", (event) => {
+    console.log(event);
+    
+    <%# unless (name.includes(search.value)) {
+        box.innerHTML = "";
+    } %>
+})
+
+</script> 
+
+
 
