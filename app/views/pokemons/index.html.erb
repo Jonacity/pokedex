@@ -31,17 +31,18 @@ const box = document.getElementById("box");
 const search = document.getElementById("search");
 const next = document.getElementById("next");
 const previous = document.getElementById("previous");
+const url_list = "https://pokeapi.co/api/v2/pokemon-form/";
 
+let current = 1;
+let size = 18;
+let max = 150;
 let pokemons = [];
 let pokemons_search = [];
+let isFetched = false;
 
-const url_list = "https://pokeapi.co/api/v2/pokemon-form/";
-const size = 18;
-let current = 1;
-const best = 150;
-
+// Next button event
 next.addEventListener("click", (event) => {
-    if (current + size < best) {
+    if (current + size < max) {
         if (needToFetch(current + size)) {
             getSizePokemons(current + size, displayPokemons);
         } else {
@@ -50,6 +51,7 @@ next.addEventListener("click", (event) => {
     }
 })
 
+// Previous button event
 previous.addEventListener("click", (event) => {
     if (current - size > 0) {
         if (needToFetch(current - size)) {
@@ -60,6 +62,7 @@ previous.addEventListener("click", (event) => {
     }
 })
 
+// Check if fetch is needed
 function needToFetch(next) {
     for (i = next; i < next + size; i++) {
         if (!pokemons[i]) {
@@ -69,14 +72,12 @@ function needToFetch(next) {
     return false;
 }
 
+// To remove if not necessary
 function refreshList() {
     
 }
 
-function init() {
-    getSizePokemons(current, displayPokemons);
-}
-
+// Fetch a pokemon from the API
 function getPokemon(id, callback, arg) {
     fetch(url_list + id)
     .then(response => response.json())
@@ -89,12 +90,14 @@ function getPokemon(id, callback, arg) {
     });
 }
 
+// Fetch pokemons for a size
 function getSizePokemons(current_id, callback) {
     for (i = current_id; i < current_id + size; i++) {
         getPokemon(i, callback, current_id);
     }
 }
 
+// Loop to display the pokemons
 function displayPokemons(start) {
     box.innerHTML = "";
     for (i = start; i < start + size; i++) {
@@ -108,6 +111,7 @@ function displayPokemons(start) {
     current = start;
 }
 
+// Insert a pokemon item in the html box
 function displayPokemon(pokemon) {
     pokemon_name = pokemon["name"];
     pokemon_image = pokemon["sprites"]["front_shiny"];
@@ -124,21 +128,45 @@ function displayPokemon(pokemon) {
     box.insertAdjacentHTML("beforeend", item);
 }
 
-function displaySearchPokemons(value) {
-    console.log(value);
+// Display pokemons filtered by search input
+function displaySearchPokemons() {
+    value = search.value;
+
+    box.innerHTML = "";
+    for (i = 1; i <= max; i++) {
+        if (pokemons[i]) {
+            if (pokemons[i]["name"].includes(value)) {
+                displayPokemon(pokemons[i]);
+            }
+        }
+    }
 }
 
 function getSearchPokemons() {
-    for (i = 1; i < best; i++) {
+    for (i = 1; i <= max; i++) {
         if (!pokemons[i]) {
-            getPokemon(i, displaySearchPokemons, search.value);
+            getPokemon(i, displaySearchPokemons);
         }     
     }
 }
 
+// Search input event
 search.addEventListener("keyup", (event) => {
-    getSearchPokemons();
+    if (search.value) {
+        if (!isFetched) {
+            getSearchPokemons();
+            isFetched = true;
+        } else {
+            displaySearchPokemons();
+        }
+    } else {
+        displayPokemons(current);
+    }
 })
+
+function init() {
+    getSizePokemons(current, displayPokemons);
+}
 
 init();
 
