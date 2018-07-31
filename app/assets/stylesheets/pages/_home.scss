@@ -1,4 +1,40 @@
+.wrapper {
+    background-color: whitesmoke;
+    padding-top: 3%;
+}
+
 .container {
     width: 1200px;
     margin: 0 auto;
+
+    h1 {
+        font-family: 'Carter One', cursive;
+        text-align: center;
+        font-size: 50px;
+    }
+}
+
+.row {
+    text-align: center;
+}
+
+.form-inline {
+    justify-content: center;
+    margin: 5%;
+}
+
+.form-inline .form-control {
+    width: 50%;
+}
+
+.card-pokemon {
+    margin: 10%;
+    border: 1px lightgray solid;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    padding: 5%;
+    
+    p {
+        font-family: 'Carter One', cursive;
+    }
 }

@@ -1,16 +1,10 @@
-<h1>Pokemons</h1>
+<h1>Pokedex</h1>
 
-<label>PokeSearch: <input id="search" type="text"></label>
+<form class="form-inline">
+  <input type="text" class="form-control mb-2 mr-sm-2" id="search" placeholder="Search a pokemon...">
+</form>
 
-<!-- <div class="row">
-    <% @pokemons.each do |pokemon| %>
-    <div class="col-xs-12 col-sm-4" id="box2">
-        <p><%= pokemon.number  %> - <div id="pokename2"><%= pokemon.name.capitalize %></div></p> 
-        <p>type: <%= pokemon.type_1 %></p>
-        <img src="<%= pokemon.image %>">
-    </div>
-    <% end %>
-</div> -->
+<div class="row" id="box"></div>
 
 <div class="row">
     <div class="col-md-6">
@@ -21,8 +15,6 @@
         <button type="button" class="btn btn-success" id="next">Next</button> 
     </div>
 </div>
-
-<div class="row" id="box"></div>
 
 
 <script> 
@@ -115,14 +107,15 @@ function displayPokemons(start) {
 function displayPokemon(pokemon) {
     pokemon_name = pokemon["name"];
     pokemon_image = pokemon["sprites"]["front_shiny"];
-    pokemon_type = pokemon["version_group"]["name"];
+    // pokemon_type = pokemon["version_group"]["name"];
     pokemon_id = pokemon["id"];
 
      item = `<div class="col-xs-12 col-sm-4">
-                <p> ${pokemon_id}
-                - ${pokemon_name}
-                - ${pokemon_type} </p>
-                <p><img src="${pokemon_image}"></p>
+                <div class="card-pokemon">
+                    <p> ${pokemon_id}
+                    - ${pokemon_name} </p>
+                    <p><img src="${pokemon_image}"></p>
+                </div>
             </div>`; 
 
     box.insertAdjacentHTML("beforeend", item);
