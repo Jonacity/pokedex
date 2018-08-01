@@ -93,7 +93,7 @@ function displayPokemon(pokemon) {
     // pokemon_type = pokemon["version_group"]["name"];
     pokemon_id = pokemon["id"];
 
-     item = `<div class="col-xs-12 col-sm-4">
+    item = `<div class="col-xs-12 col-sm-4">
                 <div class="card-pokemon">
                     <p> ${pokemon_id}
                     - ${pokemon_name} </p>
@@ -107,14 +107,29 @@ function displayPokemon(pokemon) {
 // Display pokemons filtered by search input
 function displaySearchPokemons() {
     value = search.value;
+    let results_search = [];
 
     box.innerHTML = "";
     for (i = 1; i <= max; i++) {
         if (pokemons[i]) {
             if (pokemons[i]["name"].includes(value)) {
                 displayPokemon(pokemons[i]);
-            }
+                results_search.push(i);
+            } 
         }
+    }
+
+    no_results = `<div class="no-results">
+                        <p>No results found...</p>
+                  </div>`; 
+
+    if (!results_search.length) {
+        box.innerHTML = no_results;
+        previous.style.display = "none";
+        next.style.display = "none";
+    } else {
+        previous.style.display = "initial";
+        next.style.display = "initial";
     }
 }
 
