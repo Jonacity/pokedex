@@ -84,6 +84,8 @@ function displayPokemons(start) {
         }  
     }
     current = start;
+
+    displayButtons();
 }
 
 // Insert a pokemon item in the html box
@@ -106,8 +108,15 @@ function displayPokemon(pokemon) {
 
 // Display pokemons filtered by search input
 function displaySearchPokemons() {
+    displayButtons();
+
     value = search.value;
     let results_search = [];
+
+    if (!value) {
+        displayPokemons(current);
+        return;
+    }
 
     box.innerHTML = "";
     for (i = 1; i <= max; i++) {
@@ -125,12 +134,7 @@ function displaySearchPokemons() {
 
     if (!results_search.length) {
         box.innerHTML = no_results;
-        previous.style.display = "none";
-        next.style.display = "none";
-    } else {
-        previous.style.display = "initial";
-        next.style.display = "initial";
-    }
+    } 
 }
 
 // Get search pokemon
@@ -155,6 +159,20 @@ search.addEventListener("keyup", (event) => {
         displayPokemons(current);
     }
 })
+
+function displayButtons() {
+    if (search.value) {
+        previous.style.display = "none";
+        next.style.display = "none";
+    } else {
+        previous.style.display = "initial";
+        next.style.display = "initial";
+
+        previous.hidden = (current == 1);
+
+        next.hidden = (current == max - (max % size - 1));
+    }
+}
 
 function init() {
     getSizePokemons(current, displayPokemons);
